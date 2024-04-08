@@ -7,6 +7,7 @@ function Search(){
     const[budget, setBudget] = useState(false)
     const[isBudget, setisBudget] = useState(false)
     const[budgetText, setBudgetText] = useState("Filter Budget")
+    const[scrapedItems, setScrapedItems] = useState("Number of products scraped: ")
     const[temp, setTemp] = useState([])
     function apiResponse () {
         const apiData = JSON.parse(this.responseText);
@@ -72,6 +73,7 @@ function Search(){
         setBudget(false)
         setisBudget(true)
         setBudgetText("Filter")
+        setScrapedItems("Amount of items under budget: ")
     }
     const unFilter = () => {
         setisBudget(false)
@@ -104,7 +106,7 @@ function Search(){
             </div>}
             {data && <div class="productHolder">
             <h3>Returned Products can be found at https://www.walmart.com</h3>
-            <h3>Number of products scraped: {data["Sorted Products"].length}</h3>
+            <h3>{scrapedItems} {data["Sorted Products"].length}</h3>
             <button class="btn" onClick={refreshPage}>Search New</button>
             <button class="btn" onClick={sortProducts}>Sort {lowest}</button>
             {!isBudget && <button class="btn" onClick={filter}>{budgetText}</button>}
