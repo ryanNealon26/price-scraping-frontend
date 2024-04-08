@@ -8,7 +8,12 @@ function Googlecharts(){
     const [showBar, setShowBar] = useState(false)
     const [barPlotData, setBarPlotData] = useState(false)
     const [barLabel, setBarLabel] = useState("Generate Bar Plot")
+    const [pieLabel, setPieLabel] = useState("Generate Budget Plot")
     const[budget, setBudget] = useState(false)
+    const[lowestPrice, setLowestPrice] = useState()
+    const[lowestTitle, setLowestTitle] = useState()
+    const[budgetCost, setBudgetCost] = useState()
+    const[pieData, setPieData] = useState()
     function apiResponse () {
         const apiData = JSON.parse(this.responseText);
         setData(apiData)
@@ -60,8 +65,47 @@ function Googlecharts(){
         }
     }
     const generatePiePlot = () => {
-        setBudget(true)
-    }  
+        if(pieLabel == "Generate Budget Plot"){
+            setBudget(true)
+            setPieLabel("Hide Budget Plot")
+        }else{
+            setBudget(false)
+            setPieLabel("Generate Budget Plot")
+        }
+    }
+    const piePlotData = () => {
+        var priceBudget = document.getElementById("filter-budget").value;
+        var product = ""
+        var lowest = 10000
+        var i = 0
+        var j = 0
+        while(i<data["Inventory"].length){
+            while(j<data["Inventory"][i].length){
+                var productPrice = parseFloat(data["Inventory"][i][j]["Product Price"].replace("$", ""))
+                if (productPrice < lowest && productPrice < priceBudget){
+                    lowest = productPrice
+                    product = data["Inventory"][i][j]
+                }
+                j+=1
+            }
+            i+=1
+            j = 0;
+        }
+        console.log(lowest)
+        console.log(product["Product Title"])
+        console.log(priceBudget)
+        var percent = 100 * (lowest / parseFloat(priceBudget))
+        const pieChartData = [
+            ["Item", "Price"],
+            [product["Product Title"], percent],
+            ["Budget Left", 100 - percent]
+        ];
+        setLowestPrice(lowest)
+        setBudget(false)
+        setBudgetCost(parseFloat(priceBudget))
+        setLowestTitle(product["Product Title"])
+        setPieData(pieChartData)
+    }   
     const options = {
         title: "Walmart Product Prices",
         chartArea: { width: "50%" },
@@ -73,7 +117,10 @@ function Googlecharts(){
             textPosition: 'none',
           },
     };
-      
+    const pieOptions = {
+        title: "",
+        is3D: true,
+    };
     return(
         <div>
             {!data && <div>
@@ -101,17 +148,32 @@ function Googlecharts(){
             {data &&<div>
                 <h1>Visualize Product Data with Google charts</h1>   
                 <button class="btn" type="button" onClick={generateBarPlot}>{barLabel}</button>
-                <button class="btn" type="button" onClick={generatePiePlot}>Generate Pie Chart</button>
+                <button class="btn" type="button" onClick={generatePiePlot}>{pieLabel}</button>
                 {budget && <div style={{padding: "3px"}}>
                 <input type="text" placeholder="Enter your budget" class="inputfield" id='filter-budget'></input>
-                <button class="btn" type="button">Search</button>
+                <button class="btn" type="button" onClick={piePlotData}>Submit</button>
                  </div>}
                 {showBar&&<Chart
-                chartType="BarChart"
-                width="100%"
-                height="600px"
-                data={barPlotData}
-                options={options}/>}
+                    chartType="BarChart"
+                    width="100%"
+                    height="600px"
+                    data={barPlotData}
+                    options={options}/>}
+                {pieData && 
+                <div>
+                    <h3>Budget: ${budgetCost}</h3>
+                    <h3>{lowestTitle}</h3>
+                    <h3>Product Price: ${lowestPrice}</h3>
+                    <h3>Saved: ${budgetCost-lowestPrice}</h3>
+                    <Chart
+                        chartType="PieChart"
+                        data={pieData}
+                        options={pieOptions}
+                        width={"100%"}
+                        height={"400px"}
+                    />
+                </div>
+                }
             </div>}
         </div>
     )
