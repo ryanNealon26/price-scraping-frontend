@@ -71,6 +71,7 @@ function Googlecharts(){
         }else{
             setBudget(false)
             setPieLabel("Generate Budget Plot")
+            setPieData()
         }
     }
     const piePlotData = () => {
@@ -81,10 +82,12 @@ function Googlecharts(){
         var j = 0
         while(i<data["Inventory"].length){
             while(j<data["Inventory"][i].length){
-                var productPrice = parseFloat(data["Inventory"][i][j]["Product Price"].replace("$", ""))
-                if (productPrice < lowest && productPrice < priceBudget){
-                    lowest = productPrice
-                    product = data["Inventory"][i][j]
+                if(!data["Inventory"][i][j]["monthly_payment"]){
+                    var productPrice = parseFloat(data["Inventory"][i][j]["Product Price"].replace("$", "").replace(",", ""))
+                    if (productPrice < lowest && productPrice < priceBudget){
+                        lowest = productPrice
+                        product = data["Inventory"][i][j]
+                    }
                 }
                 j+=1
             }
@@ -164,7 +167,7 @@ function Googlecharts(){
                     <h3>Budget: ${budgetCost}</h3>
                     <h3>{lowestTitle}</h3>
                     <h3>Product Price: ${lowestPrice}</h3>
-                    <h3>Saved: ${budgetCost-lowestPrice}</h3>
+                    <h3>Saved: ${(budgetCost-lowestPrice).toFixed(2)}</h3>
                     <Chart
                         chartType="PieChart"
                         data={pieData}
