@@ -40,7 +40,7 @@ function Search(){
         }
     }
     const refreshPage = () => {
-        window.location.reload(false);
+        setData()
     }
     const filter = () =>{
         if(budget==false){

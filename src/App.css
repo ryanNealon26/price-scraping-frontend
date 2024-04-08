@@ -61,3 +61,8 @@
   text-decoration: none;
   font-size: 17px;
 }
+
+.btn-holder{
+  padding: 10px;
+  align-items: center;
+}
