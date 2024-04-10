@@ -12,7 +12,9 @@ function Googlecharts(){
     const[budget, setBudget] = useState(false)
     const[lowestPrice, setLowestPrice] = useState()
     const[lowestTitle, setLowestTitle] = useState()
+    const[productList, setProductList] = useState()
     const[budgetCost, setBudgetCost] = useState()
+    const[productIndex, setProductIndex] = useState(1)
     const[pieData, setPieData] = useState()
     function apiResponse () {
         const apiData = JSON.parse(this.responseText);
@@ -77,6 +79,7 @@ function Googlecharts(){
     const piePlotData = () => {
         var priceBudget = document.getElementById("filter-budget").value;
         var product = ""
+        var productList = []
         var lowest = 10000
         var i = 0
         var j = 0
@@ -87,6 +90,7 @@ function Googlecharts(){
                     if (productPrice < lowest && productPrice < priceBudget){
                         lowest = productPrice
                         product = data["Inventory"][i][j]
+                        productList.unshift(product)
                     }
                 }
                 j+=1
@@ -94,9 +98,10 @@ function Googlecharts(){
             i+=1
             j = 0;
         }
-        console.log(lowest)
-        console.log(product["Product Title"])
-        console.log(priceBudget)
+        if(lowest == 10000){
+            alert("Your budget was to low and no products were returned at that price.")
+            return;
+        }
         var percent = 100 * (lowest / parseFloat(priceBudget))
         const pieChartData = [
             ["Item", "Price"],
@@ -106,8 +111,39 @@ function Googlecharts(){
         setLowestPrice(lowest)
         setBudget(false)
         setBudgetCost(parseFloat(priceBudget))
-        setLowestTitle(product["Product Title"])
+        setLowestTitle(product)
         setPieData(pieChartData)
+        setProductList(productList)
+    }
+    const nextProduct = () => {
+        setProductIndex(productIndex+1)
+        if(productIndex==productList.length){
+            setProductIndex(1)
+            alert("No More Products fit under you budget")
+            var productPrice = productList[0]["Product Price"].replace("$", "").replace(",", "")
+            var percent = 100 * (productPrice / parseFloat(budgetCost))
+            const pieChartData = [
+                ["Item", "Price"],
+                [productPrice, percent],
+                ["Budget Left", 100 - percent]
+            ];
+            setLowestPrice(productPrice)
+            setLowestTitle(productList[0])
+            setPieData(pieChartData)
+        }else{
+            console.log(productList.length)
+            console.log(productIndex)
+            var productPrice = productList[productIndex]["Product Price"].replace("$", "").replace(",", "")
+            var percent = 100 * (productPrice / parseFloat(budgetCost))
+            const pieChartData = [
+                ["Item", "Price"],
+                [productPrice, percent],
+                ["Budget Left", 100 - percent]
+            ];
+            setLowestPrice(productPrice)
+            setLowestTitle(productList[productIndex])
+            setPieData(pieChartData)
+        }
     }   
     const options = {
         title: "Walmart Product Prices",
@@ -164,10 +200,13 @@ function Googlecharts(){
                     options={options}/>}
                 {pieData && 
                 <div>
-                    <h3>Budget: ${budgetCost}</h3>
-                    <h3>{lowestTitle}</h3>
-                    <h3>Product Price: ${lowestPrice}</h3>
-                    <h3>Saved: ${(budgetCost-lowestPrice).toFixed(2)}</h3>
+                    <h4>Budget: ${budgetCost}</h4>
+                    <a target="_blank" href={lowestTitle["Product Link"]}>
+                        <h4>{lowestTitle["Product Title"]}</h4>
+                    </a>
+                    <h4>Product Price: ${lowestPrice}</h4>
+                    <h4>Saved: ${(budgetCost-lowestPrice).toFixed(2)}</h4>
+                    <button class="btn" onClick={nextProduct}>Next Product</button>
                     <Chart
                         chartType="PieChart"
                         data={pieData}
