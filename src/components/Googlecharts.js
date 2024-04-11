@@ -7,8 +7,11 @@ function Googlecharts(){
     const [loading, setLoading] = useState(false)
     const [showBar, setShowBar] = useState(false)
     const [barPlotData, setBarPlotData] = useState(false)
+    const [sortedData, setSortedData] = useState(false)
     const [barLabel, setBarLabel] = useState("Generate Bar Plot")
+    const[sortedBar, setSortedBar] = useState(false)
     const [pieLabel, setPieLabel] = useState("Generate Budget Plot")
+    const [sortLabel, setSortLabel] = useState("Sort Data")
     const[budget, setBudget] = useState(false)
     const[lowestPrice, setLowestPrice] = useState()
     const[lowestTitle, setLowestTitle] = useState()
@@ -64,6 +67,29 @@ function Googlecharts(){
         }else{
             setBarLabel("Generate Bar Plot")
             setShowBar(false)
+        }
+    }
+    const sortPlotData = () => {
+        if(sortLabel=="Sort Data"){
+            var data = barPlotData
+            data.shift()
+            for (var i = 0; i < data.length; i++) {
+                for (var j = 0; j < (data.length - i - 1); j++) {
+                    if (data[j][1] < data[j + 1][1]) {
+                        var temp = data[j]
+                        data[j] = data[j + 1]
+                        data[j + 1] = temp
+                    }
+                }
+            }
+            data.unshift(["Product Title", "Price"])
+            setSortedData(data)
+            setSortedBar(true)
+            setSortLabel("Unsort Data")
+        }else{
+            console.log(barPlotData)
+            setSortedBar(false)
+            setSortLabel("Sort Data")
         }
     }
     const generatePiePlot = () => {
@@ -192,12 +218,22 @@ function Googlecharts(){
                 <input type="text" placeholder="Enter your budget" class="inputfield" id='filter-budget'></input>
                 <button class="btn" type="button" onClick={piePlotData}>Submit</button>
                  </div>}
-                {showBar&&<Chart
+                {showBar&& 
+                <div style={{padding: "3px"}}>
+                    <button class="btn" onClick={sortPlotData}>{sortLabel}</button>
+                    {!sortedBar && <Chart
                     chartType="BarChart"
                     width="100%"
                     height="600px"
                     data={barPlotData}
                     options={options}/>}
+                    {sortedBar && <Chart
+                    chartType="BarChart"
+                    width="100%"
+                    height="600px"
+                    data={sortedData}
+                    options={options}/>}
+                </div>}
                 {pieData && 
                 <div>
                     <h4>Budget: ${budgetCost}</h4>
