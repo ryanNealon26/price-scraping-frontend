@@ -71,7 +71,7 @@ function Googlecharts(){
     }
     const sortPlotData = () => {
         if(sortLabel=="Sort Data"){
-            var data = barPlotData
+            var data = barPlotData.slice()
             data.shift()
             for (var i = 0; i < data.length; i++) {
                 for (var j = 0; j < (data.length - i - 1); j++) {
@@ -83,6 +83,7 @@ function Googlecharts(){
                 }
             }
             data.unshift(["Product Title", "Price"])
+            console.log(data)
             setSortedData(data)
             setSortedBar(true)
             setSortLabel("Unsort Data")
