@@ -107,15 +107,13 @@ function Googlecharts(){
         var priceBudget = document.getElementById("filter-budget").value;
         var product = ""
         var productList = []
-        var lowest = 10000
         var i = 0
         var j = 0
         while(i<data["Inventory"].length){
             while(j<data["Inventory"][i].length){
                 if(!data["Inventory"][i][j]["monthly_payment"]){
                     var productPrice = parseFloat(data["Inventory"][i][j]["Product Price"].replace("$", "").replace(",", ""))
-                    if (productPrice < lowest && productPrice < priceBudget){
-                        lowest = productPrice
+                    if (productPrice < priceBudget){
                         product = data["Inventory"][i][j]
                         productList.unshift(product)
                     }
@@ -125,17 +123,17 @@ function Googlecharts(){
             i+=1
             j = 0;
         }
-        if(lowest == 10000){
+        if(productList.length==0){
             alert("Your budget was to low and no products were returned at that price.")
             return;
         }
-        var percent = 100 * (lowest / parseFloat(priceBudget))
+        var percent = 100 * (parseFloat(product["Product Price"].replace("$", "").replace(",", "")) / parseFloat(priceBudget))
         const pieChartData = [
             ["Item", "Price"],
             [product["Product Title"], percent],
             ["Budget Left", 100 - percent]
         ];
-        setLowestPrice(lowest)
+        
         setBudget(false)
         setBudgetCost(parseFloat(priceBudget))
         setLowestTitle(product)
@@ -241,8 +239,8 @@ function Googlecharts(){
                     <a target="_blank" href={lowestTitle["Product Link"]}>
                         <h4>{lowestTitle["Product Title"]}</h4>
                     </a>
-                    <h4>Product Price: ${lowestPrice}</h4>
-                    <h4>Saved: ${(budgetCost-lowestPrice).toFixed(2)}</h4>
+                    <h4>Product Price: {lowestTitle["Product Price"]}</h4>
+                    <h4>Saved: ${(budgetCost-parseFloat(lowestTitle["Product Price"].replace("$", "").replace(",", "")).toFixed(2))}</h4>
                     <button class="btn" onClick={nextProduct}>Next Product</button>
                     <Chart
                         chartType="PieChart"
