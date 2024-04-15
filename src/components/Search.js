@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import "./styles.css"
+import SelectBox from './SelectBox';
 function Search(){
     const [data, setData] = useState()
     const [loading, setLoading] = useState(false)
@@ -86,18 +87,7 @@ function Search(){
                 <h1>Enter the product to search for.</h1>
                 <h3>More Pages Scraped The Longer The Request Takes</h3>
                 <form>
-                    <select id="pageSelect">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                    </select>
+                    <SelectBox></SelectBox>
                     <input type="text" placeholder="Search for products" class="inputfield" id='product-entry'></input>
                     {!loading && <button class="btn" type="button" onClick={apiCall}>Search</button>}
                     {loading && <button class="btn" type="button" onClick={refreshPage}>Cancel</button>}

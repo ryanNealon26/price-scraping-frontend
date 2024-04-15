@@ -1,10 +1,12 @@
 import './App.css';
 import Search from './components/Search';
 import Googlecharts from './components/Googlecharts';
+import RocketHomes from './components/RocketHomes';
 import React, {useEffect, useState} from 'react'
 function App() {
   const[search, setSearch] = useState(true)
   const[charts, setCharts] = useState(true)
+  const[rocketHomes, setRocketHomes] = useState(true)
   const[hideButton, setHideButton] = useState(true)
   const[returnHome, SetReturnHome] = useState("Price Scraping Service")
   const productSearch = () => {
@@ -14,6 +16,11 @@ function App() {
   }
   const googleCharts = () => {
     setCharts(false)
+    setHideButton(false)
+    SetReturnHome("Return Home")
+  }
+  const RealEstate = () => {
+    setRocketHomes(false)
     setHideButton(false)
     SetReturnHome("Return Home")
   }
@@ -37,12 +44,13 @@ function App() {
         </button>
       </div>}
       {hideButton && <div class="btn-holder">
-         <button class='select-btn' onClick={googleCharts}>
+         <button class='select-btn' onClick={RealEstate}>
           <h3>Search for ROCKET Homes Properties</h3>
         </button>
       </div>}
       {!search && <Search></Search>}
       {!charts &&  <Googlecharts></Googlecharts>}
+      {!rocketHomes && <RocketHomes></RocketHomes>}
     </div>
   );
 }
