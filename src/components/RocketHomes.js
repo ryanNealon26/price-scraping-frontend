@@ -6,6 +6,9 @@ function RocketHomes(){
     const [data, setData] = useState()
     const [loading, setLoading] = useState(false)
     const[lowest, setHighest] = useState("Highest")
+    const[budget, setBudget] = useState(false)
+    const[budgetText, setBudgetText] = useState("Filter")
+    const[temp, setTemp] = useState([])
     function apiResponse () {
         const apiData = JSON.parse(this.responseText);
         setData(apiData)
@@ -36,6 +39,38 @@ function RocketHomes(){
             data["Property Data"] = data["Property Data"].slice(0).reverse()
         }
     }
+    const filter = () => {
+        if(budgetText=="Filter"){
+            setBudget(true)
+            setBudgetText("Unfilter")
+        }else{
+            setBudget(false)
+            setBudgetText("Filter")
+            data["Property Data"] = temp
+        }
+    }
+
+    const filterPrices = () => {
+        var lowerBound = document.getElementById("lower-bound").value;
+        var upperBound = document.getElementById("upper-bound").value;
+        if(lowerBound == '' || upperBound == ''){
+            alert("Please Make Sure You Fill out Both Fields");
+            return
+        }
+        var lowerPrice = parseFloat(lowerBound.replace("$", "").replaceAll(",", ""))
+        var upperPrice = parseFloat(upperBound.replace("$", "").replaceAll(",", ""))
+        console.log(upperPrice)
+        var filteredArray = []
+        setTemp(data["Property Data"])
+        for(let i = 0; i<data["Property Data"].length; i+=1){
+            var price = parseInt(data["Property Data"][i]["Property Price"].replace("$", "").replaceAll(",", ""))
+            if(price >= lowerPrice && price <= upperPrice){
+                filteredArray.push(data["Property Data"][i])
+            }
+        }
+        data["Property Data"] = filteredArray
+        setBudget(false)
+    }
     const refreshPage = () => {
         setData()
     }
@@ -54,10 +89,16 @@ function RocketHomes(){
                 {loading && <h3>fetching listings...</h3>}
             </div>}
             {data && <div class="productHolder">
-                <h3>Returned Lists can be found at https://www.walmart.com</h3>
+                <h3>Returned Listings can be found at https://www.rockethomes.com/</h3>
                 <h3>Number Of Listings Scraped {data["Property Data"].length}</h3>
                 <button class="btn" onClick={refreshPage}>Search New</button>
                 <button class="btn" onClick={sortProducts}>Sort {lowest}</button>
+                <button class="btn" onClick={filter}>{budgetText} Listings</button>
+                {budget && <div style={{padding: "3px"}}>
+                <input type="text" placeholder="Enter Your Lower Bound" class="filterField" id='lower-bound'></input>
+                <input type="text" placeholder="Enter Your Upper Bound" class="filterField" id='upper-bound'></input>
+                <button class="btn" type="button" onClick={filterPrices}>Submit</button>
+                 </div>}
                 {data["Property Data"].map((property, index)=>(
                     <a target="_blank" href={property["Property Link"]} class="links">
                          <div alt={index} class="product">

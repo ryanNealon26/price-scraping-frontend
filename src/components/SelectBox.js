@@ -3,7 +3,7 @@ import "./styles.css"
 
 function SelectBox(){
     return (
-        <select id="pageSelect">
+        <select style={{padding: "3px"}} id="pageSelect">
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>

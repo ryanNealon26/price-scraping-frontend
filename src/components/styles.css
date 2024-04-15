@@ -58,8 +58,8 @@
   background-color: white;
   color: black;
   border: 2px solid #555555;
-  border-radius: 20px;
-  padding: 2px;
+  border-radius: 10px;
+  padding: 4px;
   transition-duration: 0.4s;
 }
 .btn:hover {
@@ -80,7 +80,12 @@
   background-color: #555555;
   color: white;
 }
-
+.filterField{
+  width: 15%;
+  padding: 3px;
+  border-radius: 8px;
+  height: 20px;
+}
 @media screen and (max-width: 480px) {
   .productImage{
   width: 65%;
@@ -94,7 +99,13 @@
   border: 2px solid #555555;
   border-radius: 20px;
   padding: 2px;
-  width: 30%;
+  width: 95%;
   transition-duration: 0.4s;
 }  
+.filterField{
+  width: 35%;
+  padding: 3px;
+  border-radius: 8px;
+  height: 15px;
+}
 }

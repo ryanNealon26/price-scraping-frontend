@@ -45,7 +45,7 @@ function App() {
       </div>}
       {hideButton && <div class="btn-holder">
          <button class='select-btn' onClick={RealEstate}>
-          <h3>Search for ROCKET Homes Properties</h3>
+          <h3>Search for Real Estate Listings</h3>
         </button>
       </div>}
       {!search && <Search></Search>}
