@@ -5,6 +5,7 @@ import SelectBox from './SelectBox'
 function RocketHomes(){
     const [data, setData] = useState()
     const [loading, setLoading] = useState(false)
+    const[lowest, setHighest] = useState("Highest")
     function apiResponse () {
         const apiData = JSON.parse(this.responseText);
         setData(apiData)
@@ -25,6 +26,16 @@ function RocketHomes(){
         req.open("GET", `rocket-homes/${state}/${formattedEntry}/${userPages}`);
         req.send();
     }
+    const sortProducts = () => {
+        if(lowest=="Highest"){
+            setHighest("Lowest")
+            data["Property Data"] = data["Property Data"].slice(0).reverse()
+        }
+        if(lowest=="Lowest"){
+            setHighest("Highest")
+            data["Property Data"] = data["Property Data"].slice(0).reverse()
+        }
+    }
     const refreshPage = () => {
         setData()
     }
@@ -38,6 +49,7 @@ function RocketHomes(){
                     <input type="text" placeholder="Enter State Abbreviation" class="propertyInput" id='state-entry'></input>
                     <input type="text" placeholder="Enter City" class="propertyInput" id='city-entry'></input>
                     {!loading && <button class="btn" type="button" onClick={apiCall}>Search</button>}
+                    {loading && <button class="btn" type="button" onClick={refreshPage}>Cancel</button>}
                 </form>
                 {loading && <h3>fetching listings...</h3>}
             </div>}
@@ -45,6 +57,7 @@ function RocketHomes(){
                 <h3>Returned Lists can be found at https://www.walmart.com</h3>
                 <h3>Number Of Listings Scraped {data["Property Data"].length}</h3>
                 <button class="btn" onClick={refreshPage}>Search New</button>
+                <button class="btn" onClick={sortProducts}>Sort {lowest}</button>
                 {data["Property Data"].map((property, index)=>(
                     <a target="_blank" href={property["Property Link"]} class="links">
                          <div alt={index} class="product">
