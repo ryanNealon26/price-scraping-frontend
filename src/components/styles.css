@@ -59,6 +59,7 @@
   color: black;
   border: 2px solid #555555;
   border-radius: 10px;
+  font-family: "Times New Roman", Times, serif;
   padding: 4px;
   transition-duration: 0.4s;
 }
@@ -74,6 +75,7 @@
   border-radius: 20px;
   padding: 2px;
   width: 30%;
+  font-family: "Times New Roman", Times, serif;
   transition-duration: 0.4s;
 }
 .select-btn:hover {
