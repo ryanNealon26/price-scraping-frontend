@@ -14,7 +14,6 @@ function Googlecharts(){
     const [pieLabel, setPieLabel] = useState("Generate Budget Plot")
     const [sortLabel, setSortLabel] = useState("Sort Data")
     const[budget, setBudget] = useState(false)
-    const[lowestPrice, setLowestPrice] = useState()
     const[lowestTitle, setLowestTitle] = useState()
     const[productList, setProductList] = useState()
     const[budgetCost, setBudgetCost] = useState()
@@ -153,7 +152,6 @@ function Googlecharts(){
                 [productPrice, percent],
                 ["Budget Left", 100 - percent]
             ];
-            setLowestPrice(productPrice)
             setLowestTitle(productList[0])
             setPieData(pieChartData)
         }else{
@@ -166,7 +164,6 @@ function Googlecharts(){
                 [productPrice, percent],
                 ["Budget Left", 100 - percent]
             ];
-            setLowestPrice(productPrice)
             setLowestTitle(productList[productIndex])
             setPieData(pieChartData)
         }
