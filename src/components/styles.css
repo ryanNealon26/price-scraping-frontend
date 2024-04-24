@@ -1,4 +1,7 @@
-
+* {
+ font-family: Roboto Mono, monospace;
+ margin: 3px;
+}
 .topnav {
   background-color: black;
   overflow: hidden;
@@ -88,6 +91,17 @@
   border-radius: 8px;
   height: 20px;
 }
+.text-field{
+  resize: none;
+  border-radius: 8px;
+  width: 25%;
+}
+.ai-field{
+  width: 85%;
+  max-width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
 @media screen and (max-width: 480px) {
   .productImage{
   width: 65%;
@@ -104,6 +118,17 @@
   width: 95%;
   transition-duration: 0.4s;
 }  
+.text-field{
+  resize: none;
+  border-radius: 8px;
+  width: 50%;
+}
+.ai-field{
+  width: 90%;
+  max-width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
 .filterField{
   width: 35%;
   padding: 3px;
